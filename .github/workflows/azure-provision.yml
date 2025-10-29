@@ -1,0 +1,69 @@
+name: Provision Azure resources for Translator
+
+on:
+  workflow_dispatch:
+    inputs:
+      location:
+        description: 'Azure region (e.g. eastus)'
+        required: true
+        default: 'eastus'
+      resource_group:
+        description: 'Resource group name'
+        required: true
+        default: 'translator-rg'
+      account_name:
+        description: 'Cognitive Services account name (must be globally unique)'
+        required: true
+        default: 'translator-openai-001'
+      sku:
+        description: 'SKU for the Cognitive Services account (S0 recommended)'
+        required: true
+        default: 'S0'
+
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (for completeness)
+        uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create resource group
+        run: |
+          az group create --name "${{ github.event.inputs.resource_group }}" --location "${{ github.event.inputs.location }}"
+
+      - name: Create Cognitive Services (Azure OpenAI) account
+        run: |
+          az cognitiveservices account create \
+            --name "${{ github.event.inputs.account_name }}" \
+            --resource-group "${{ github.event.inputs.resource_group }}" \
+            --kind OpenAI \
+            --sku "${{ github.event.inputs.sku }}" \
+            --location "${{ github.event.inputs.location }}" \
+            --yes
+
+      - name: Get keys and endpoint, write env file
+        run: |
+          set -e
+          KEY=$(az cognitiveservices account keys list --resource-group "${{ github.event.inputs.resource_group }}" --name "${{ github.event.inputs.account_name }}" --query "key1" -o tsv)
+          ENDPOINT=$(az cognitiveservices account show --resource-group "${{ github.event.inputs.resource_group }}" --name "${{ github.event.inputs.account_name }}" --query "properties.endpoint" -o tsv)
+          echo "AZURE_OPENAI_KEY=$KEY" > azure_keys.env
+          echo "AZURE_ENDPOINT=$ENDPOINT" >> azure_keys.env
+          echo "Created azure_keys.env with the account key and endpoint."
+          cat azure_keys.env
+
+      - name: Upload azure keys artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: azure-credentials
+          path: azure_keys.env
+
+      - name: Summary
+        run: |
+          echo "Resource group: ${{ github.event.inputs.resource_group }}"
+          echo "Account name: ${{ github.event.inputs.account_name }}"
+          echo "Artifact 'azure-credentials' contains AZURE_OPENAI_KEY and AZURE_ENDPOINT"

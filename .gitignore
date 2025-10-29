@@ -205,3 +205,13 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Node.js
+global-text-translator-web/node_modules/
+global-text-translator-web/npm-debug.log*
+global-text-translator-web/yarn-debug.log*
+global-text-translator-web/yarn-error.log*
+global-text-translator-web/.npm
+global-text-translator-web/.yarn-integrity
+global-text-translator-web/package-lock.json
+global-text-translator-web/yarn.lock
