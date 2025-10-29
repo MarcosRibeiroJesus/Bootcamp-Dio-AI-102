@@ -1,6 +1,9 @@
 
 [OpenAI Translator.webm](https://github.com/user-attachments/assets/ea47bec4-5d9e-490c-bfa1-3afd02ea8056)
 
+
+<img width="3804" height="1831" alt="image" src="https://github.com/user-attachments/assets/eb3ec385-d063-484f-89f6-26ff03dc657d" />
+
 ## Python translator app (Flask) — run & deploy
 
 This folder contains a small Flask app that:
