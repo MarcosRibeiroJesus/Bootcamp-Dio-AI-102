@@ -1,4 +1,6 @@
 # Document Intelligence Anti-Fraud Service
+<img width="2842" height="1832" alt="image" src="https://github.com/user-attachments/assets/5f31b271-1024-4dab-95a4-7ec5bb88eff1" />
+
 
 ![Validation Results](image.png)
 
