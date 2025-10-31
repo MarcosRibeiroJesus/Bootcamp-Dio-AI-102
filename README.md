@@ -2,6 +2,8 @@
 
 ![Validation Results](image.png)
 
+<img width="3840" height="5608" alt="Valid Card Screen" src="https://github.com/user-attachments/assets/6f64a848-3c65-4444-a08c-4bc70f42a668" />
+
 Small Python service that uploads documents to Azure Blob Storage and uses Azure Document Intelligence (prebuilt models) to analyze documents for 'anti-fraud' checks.
 
 Quick start
